@@ -38,7 +38,7 @@ do
     string cpf = Console.ReadLine();
     Console.Write("Telefone: ");
     string phone = Console.ReadLine();
-    Console.Write("Endereço: ");
+    Console.Write("Endereço (Rua, número e/ou complemento): ");
     string address = Console.ReadLine();
     Console.Write("Bairro: ");
     string neighborhood = Console.ReadLine();
@@ -56,10 +56,12 @@ do
     IList<string> list = new List<string>();
     foreach (var comorbidity in comorbidities)
     {
-        list.Add(comorbidity);
+        if (!string.IsNullOrEmpty(comorbidity))
+            list.Add(comorbidity);
     }
 
     Console.WriteLine("Gravando informações no banco de dados...");
+    Console.WriteLine();
 
     var patient = new Patient(name, cpf, phone, address, neighborhood, cep, cityState, dateOfBirth, email, list);
     patient.CalculateAge();
@@ -70,13 +72,13 @@ do
         Console.WriteLine("Gerando arquivo para ser enviado à Secretaria da Saúde da cidade");
         patientController.GenerateTxt(patient).Wait();
         Console.WriteLine("Arquivo gerado");
+        Console.WriteLine();
     }
 
-    Console.WriteLine();
     Console.WriteLine("Informações salvas no banco de dados");
 
     Console.WriteLine();
-    Console.Write("Gostaria de continuar? (S/N) ");
+    Console.Write("Gostaria de cadastrar outro paciente? (S/N) ");
     string answer = Console.ReadLine().ToLowerInvariant();
     continueUsing = answer == "s";
     
